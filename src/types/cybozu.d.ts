@@ -44,3 +44,5 @@ type Schema = {
   subTable: Record<string, Table>;
   table: Table;
 };
+
+declare const cybozu: Cybozu;

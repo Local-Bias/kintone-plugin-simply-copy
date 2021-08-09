@@ -32,4 +32,8 @@ const createConfig = (): kintone.plugin.Storage => ({
   conditions: [getNewCondition()],
 });
 
-export const getNewCondition = (): kintone.plugin.Condition => ({ field: '' });
+export const getNewCondition = (): kintone.plugin.Condition => ({
+  fieldSrc: '',
+  fieldDst: '',
+  spaceId: '',
+});

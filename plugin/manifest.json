@@ -4,12 +4,12 @@
   "type": "APP",
   "name": {
     "en": "kintone-plugin-template",
-    "ja": "プラグインテンプレート",
+    "ja": "フィールドデータコピープラグイン",
     "zh": "插件模板"
   },
   "description": {
     "en": "kintone-plugin-template",
-    "ja": "プラグインテンプレート",
+    "ja": "特定のフィールドの値を、ボタンを押したタイミングで別フィールドへコピーします",
     "zh": "插件模板"
   },
   "desktop": {

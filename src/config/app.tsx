@@ -1,7 +1,7 @@
 import React, { Suspense, VFC } from 'react';
 import { SnackbarProvider } from 'notistack';
 
-import { Footer, Form, SocialIcons } from './components';
+import { Footer, Form } from './components';
 import { RecoilRoot } from 'recoil';
 import { pluginIdState, storageState } from './states';
 import { restoreStorage } from '@common/plugin';
@@ -21,7 +21,6 @@ const Component: VFC<{ pluginId: string }> = ({ pluginId }) => (
         </Suspense>
       </SnackbarProvider>
     </RecoilRoot>
-    <SocialIcons />
   </>
 );
 

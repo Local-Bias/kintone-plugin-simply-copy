@@ -7,7 +7,7 @@ declare namespace kintone {
       conditions: Condition[];
     };
 
-    type Condition = { field: string };
+    type Condition = { fieldSrc: string; fieldDst: string; spaceId: string };
   }
 
   type EventType =

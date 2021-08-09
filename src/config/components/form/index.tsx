@@ -1,4 +1,4 @@
-import React, { FC, VFCX } from 'react';
+import React, { FC, Suspense, VFCX } from 'react';
 import { useRecoilValue } from 'recoil';
 import styled from '@emotion/styled';
 import { CircularProgress } from '@material-ui/core';
@@ -21,10 +21,12 @@ const Component: VFCX<Props> = ({ className, storage }) => (
     )}
     {!!storage && (
       <>
-        {storage.conditions.map((condition, index) => (
-          <Condition {...{ condition, index }} />
-        ))}
-        <ConditionAdditionButton label='新しいルックアップ設定' />
+        <Suspense fallback={<div>アプリ情報を取得しています</div>}>
+          {storage.conditions.map((condition, index) => (
+            <Condition key={index} {...{ condition, index }} />
+          ))}
+        </Suspense>
+        <ConditionAdditionButton label='新しい設定' />
       </>
     )}
   </div>
