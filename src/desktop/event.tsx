@@ -31,7 +31,9 @@ const action: kintone.Action = async (event, pluginId) => {
       }
     };
 
-    render(<Button {...{ onClick }} />, element);
+    const buttonLabel = condition.buttonLabel;
+
+    render(<Button {...{ onClick, buttonLabel }} />, element);
   }
 
   return event;

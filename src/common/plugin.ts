@@ -36,4 +36,5 @@ export const getNewCondition = (): kintone.plugin.Condition => ({
   fieldSrc: '',
   fieldDst: '',
   spaceId: '',
+  buttonLabel: 'データをコピー',
 });

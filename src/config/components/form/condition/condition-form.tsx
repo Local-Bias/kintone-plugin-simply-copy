@@ -1,4 +1,4 @@
-import React, { ChangeEventHandler, useState, VFC, VFCX } from 'react';
+import React, { ChangeEvent, ChangeEventHandler, useState, VFC, VFCX } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from '@emotion/styled';
 import produce from 'immer';
@@ -8,24 +8,26 @@ import { appFieldsState, spacesState, storageState } from '../../../states';
 import { MenuItem, TextField } from '@material-ui/core';
 import { Spacer } from '@kintone/rest-api-client/lib/KintoneFields/types/fieldLayout';
 
-type ContainerProps = { condition: kintone.plugin.Condition; index: number };
-type Props = ContainerProps & {
+type ContainerProps = Readonly<{ condition: kintone.plugin.Condition; index: number }>;
+type Props = Readonly<{
+  condition: kintone.plugin.Condition;
   appFields: Properties;
   spacers: Spacer[];
   onSrcChange: ChangeEventHandler<HTMLInputElement>;
   onDstChange: ChangeEventHandler<HTMLInputElement>;
   onSpaceIdChange: ChangeEventHandler<HTMLInputElement>;
-};
+  onButtonLabelChange: ChangeEventHandler<HTMLInputElement>;
+}>;
 
 const Component: VFCX<Props> = ({
   className,
-  index,
   condition,
   appFields,
   spacers,
   onSrcChange,
   onDstChange,
   onSpaceIdChange,
+  onButtonLabelChange,
 }) => (
   <div {...{ className }}>
     <div>
@@ -73,6 +75,14 @@ const Component: VFCX<Props> = ({
         ))}
       </TextField>
     </div>
+    <div>
+      <TextField
+        label='ボタンに表示する文字列'
+        fullWidth
+        value={condition.buttonLabel}
+        onChange={onButtonLabelChange}
+      />
+    </div>
   </div>
 );
 
@@ -92,31 +102,31 @@ const Container: VFC<ContainerProps> = ({ condition, index }) => {
   const setStorage = useSetRecoilState(storageState);
   const spacers = useRecoilValue(spacesState);
 
-  const onSrcChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>, field: keyof kintone.plugin.Condition) => {
     setStorage((_, _storage = _!) =>
       produce(_storage, (draft) => {
-        draft.conditions[index].fieldSrc = e.target.value;
-      })
-    );
-  };
-  const onDstChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setStorage((_, _storage = _!) =>
-      produce(_storage, (draft) => {
-        draft.conditions[index].fieldDst = e.target.value;
-      })
-    );
-  };
-  const onSpaceIdChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setStorage((_, _storage = _!) =>
-      produce(_storage, (draft) => {
-        draft.conditions[index].spaceId = e.target.value;
+        draft.conditions[index][field] = e.target.value;
       })
     );
   };
 
+  const onSrcChange: ChangeEventHandler<HTMLInputElement> = (e) => onChange(e, 'fieldSrc');
+  const onDstChange: ChangeEventHandler<HTMLInputElement> = (e) => onChange(e, 'fieldDst');
+  const onSpaceIdChange: ChangeEventHandler<HTMLInputElement> = (e) => onChange(e, 'spaceId');
+  const onButtonLabelChange: ChangeEventHandler<HTMLInputElement> = (e) =>
+    onChange(e, 'buttonLabel');
+
   return (
     <StyledComponent
-      {...{ condition, index, appFields, spacers, onSrcChange, onDstChange, onSpaceIdChange }}
+      {...{
+        condition,
+        appFields,
+        spacers,
+        onSrcChange,
+        onDstChange,
+        onSpaceIdChange,
+        onButtonLabelChange,
+      }}
     />
   );
 };
