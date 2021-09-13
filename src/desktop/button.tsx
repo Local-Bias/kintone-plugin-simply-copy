@@ -1,22 +1,14 @@
-import React, { VFC, VFCX } from 'react';
-import styled from '@emotion/styled';
+import React, { VFC } from 'react';
 import { Button } from '@material-ui/core';
 
-type ContainerProps = Readonly<{ onClick: () => void; buttonLabel: string }>;
-type Props = ContainerProps & Readonly<{}>;
+type Props = Readonly<{ onClick: () => void; buttonLabel: string }>;
 
-const Component: VFCX<Props> = ({ className, onClick, buttonLabel }) => (
-  <div {...{ className }}>
+const Component: VFC<Props> = ({ onClick, buttonLabel }) => (
+  <div>
     <Button variant='contained' size='large' color='primary' {...{ onClick }}>
       {buttonLabel}
     </Button>
   </div>
 );
 
-const StyledComponent = styled(Component)``;
-
-const Container: VFC<ContainerProps> = (props) => {
-  return <StyledComponent {...props} />;
-};
-
-export default Container;
+export default Component;
