@@ -14,7 +14,7 @@
     "move-ppk": "node scripts/move-ppk.ts"
   },
   "devDependencies": {
-    "@emotion/react": "11.4.1",
+    "@emotion/react": "11.5.0",
     "@emotion/styled": "11.3.0",
     "@kintone/dts-gen": "5.0.8",
     "@kintone/plugin-packer": "5.0.22",
