@@ -6,6 +6,7 @@ import { RecoilRoot } from 'recoil';
 import { pluginIdState, storageState } from './states';
 import { restoreStorage } from '@common/plugin';
 import { Loading } from '@common/components/loading';
+import SocialIcons from './components/social-icons';
 
 const Component: VFC<{ pluginId: string }> = ({ pluginId }) => (
   <>
@@ -22,6 +23,7 @@ const Component: VFC<{ pluginId: string }> = ({ pluginId }) => (
         </Suspense>
       </SnackbarProvider>
     </RecoilRoot>
+    <SocialIcons />
   </>
 );
 
