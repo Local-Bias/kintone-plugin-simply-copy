@@ -5,6 +5,7 @@ import { Footer, Form } from './components';
 import { RecoilRoot } from 'recoil';
 import { pluginIdState, storageState } from './states';
 import { restoreStorage } from '@common/plugin';
+import { Loading } from '@common/components/loading';
 
 const Component: VFC<{ pluginId: string }> = ({ pluginId }) => (
   <>
@@ -15,7 +16,7 @@ const Component: VFC<{ pluginId: string }> = ({ pluginId }) => (
       }}
     >
       <SnackbarProvider maxSnack={3}>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<Loading label='設定情報を取得しています' />}>
           <Form />
           <Footer />
         </Suspense>

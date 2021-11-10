@@ -1,11 +1,16 @@
+const path = require('path');
 const { merge } = require('webpack-merge');
-const common = require('./webpack.common.ts');
-const TerserPlugin = require('terser-webpack-plugin');
+const common = require('./webpack.common.js');
 const KintonePlugin = require('@kintone/webpack-plugin-kintone-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = merge(common, {
   mode: 'production',
 
+  output: {
+    path: path.resolve(__dirname, 'cdn'),
+    filename: '[name].js',
+  },
   plugins: [
     new KintonePlugin({
       manifestJSONPath: './plugin/manifest.json',
@@ -18,8 +23,11 @@ module.exports = merge(common, {
     minimize: true,
     minimizer: [
       new TerserPlugin({
+        parallel: true,
         terserOptions: {
-          compress: { drop_console: true },
+          format: {
+            comments: false,
+          },
         },
       }),
     ],

@@ -2,13 +2,13 @@ import React from 'react';
 import { render } from 'react-dom';
 import { getCurrentRecord, getSpaceElement, setCurrentRecord } from '@common/kintone';
 import { restoreStorage } from '@common/plugin';
-import { PLUGIN_NAME } from '@common/constants';
+import { PLUGIN_NAME } from '@common/statics';
 
 import Button from './button';
 
-const events: kintone.EventType[] = ['app.record.create.show', 'app.record.edit.show'];
+const events: launcher.EventTypes = ['app.record.create.show', 'app.record.edit.show'];
 
-const action: kintone.Action = async (event, pluginId) => {
+const action: launcher.Action = async (event, pluginId) => {
   const config = restoreStorage(pluginId);
 
   if (!config || !config.conditions) {

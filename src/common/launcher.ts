@@ -1,15 +1,5 @@
-import { PLUGIN_NAME } from '@common/constants';
-
-/**
- * イベント実行に必要なプロパティ情報
- * 必須はactionのみで、eventsに指定がない場合は一覧表示イベント(app.record.index.show)が設定されます
- */
-export type Config = Readonly<{
-  enables?: kintone.Enables;
-  events?: string[] | ((pluginId: string) => string[]);
-  action: kintone.Action;
-  disableMobile?: boolean;
-}>;
+import { PLUGIN_NAME } from '@common/statics';
+import { pushPluginName } from './local-storage';
 
 class Launcher {
   private readonly _pluginId: string;
@@ -19,13 +9,16 @@ class Launcher {
    */
   public constructor(pluginId: string) {
     this._pluginId = pluginId;
+    try {
+      pushPluginName();
+    } catch (error) {}
   }
 
   /**
    * 指定された各処理を、各イベント発生時に実行されるよう登録していきます.
    * 特に指定がない場合、モバイル向けにもイベントが登録されます.
    */
-  public launch = (configs: Config[]) => {
+  public launch = (configs: launcher.Config[]): void => {
     for (const config of configs) {
       const {
         enables = () => true,
@@ -36,11 +29,11 @@ class Launcher {
 
       const desktopEvents = typeof events === 'function' ? events(this._pluginId) : events;
 
-      const mobileEvents = !disableMobile ? desktopEvents.map((type) => 'mobile.' + type) : [];
+      const mobileEvents = !disableMobile ? desktopEvents.map((type) => `mobile.${type}`) : [];
 
       const handler = (event: kintone.Event) => {
         try {
-          return enables(event) ? action(event, this._pluginId) : event;
+          return enables(event, this._pluginId) ? action(event, this._pluginId) : event;
         } catch (error) {
           event.error = `プラグイン「${PLUGIN_NAME}」の処理内でエラーが発生しました。`;
           console.error('エラー', error);
