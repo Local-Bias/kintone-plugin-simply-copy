@@ -28,7 +28,7 @@
     "@material-ui/icons": "4.11.2",
     "@types/luxon": "2.3.1",
     "@types/react": "17.0.41",
-    "@types/react-dom": "17.0.13",
+    "@types/react-dom": "17.0.14",
     "esbuild-loader": "2.18.0",
     "fork-ts-checker-webpack-plugin": "7.2.1",
     "immer": "9.0.12",
