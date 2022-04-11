@@ -17,7 +17,7 @@
     "start": "run-p watch upload"
   },
   "devDependencies": {
-    "@emotion/react": "11.8.2",
+    "@emotion/react": "11.9.0",
     "@emotion/styled": "11.8.1",
     "@kintone/dts-gen": "5.0.22",
     "@kintone/plugin-packer": "5.0.38",
