@@ -1,30 +1,46 @@
-import React, { Suspense, VFC } from 'react';
+import {
+  PluginBanner,
+  PluginContent,
+  PluginLayout,
+  PluginConfigProvider,
+  Notification,
+} from '@konomi-app/kintone-utilities-react';
+import { LoaderWithLabel } from '@konomi-app/ui-react';
 import { SnackbarProvider } from 'notistack';
-
-import { Footer, Form } from './components';
+import React, { FC, Suspense } from 'react';
 import { RecoilRoot } from 'recoil';
-import { pluginIdState, storageState } from './states';
-import { restoreStorage } from '@common/plugin';
-import { Loading } from '@common/components/loading';
-import SocialIcons from './components/social-icons';
+import { URL_BANNER, URL_PROMOTION } from '@/lib/static';
+import { PluginErrorBoundary } from '@/lib/components/error-boundary';
+import Footer from './components/model/footer';
+import Form from './components/model/form';
+import Sidebar from './components/model/sidebar';
+import config from '../../plugin.config.mjs';
 
-const Component: VFC<{ pluginId: string }> = ({ pluginId }) => (
-  <>
-    <RecoilRoot
-      initializeState={({ set }) => {
-        set(pluginIdState, pluginId);
-        set(storageState, restoreStorage(pluginId));
-      }}
-    >
-      <SnackbarProvider maxSnack={3}>
-        <Suspense fallback={<Loading label='設定情報を取得しています' />}>
-          <Form />
-          <Footer />
-        </Suspense>
-      </SnackbarProvider>
+const Component: FC = () => (
+  <Suspense fallback={<LoaderWithLabel label='画面の描画を待機しています' />}>
+    <RecoilRoot>
+      <PluginErrorBoundary>
+        <PluginConfigProvider config={config}>
+          <Notification />
+          <SnackbarProvider maxSnack={1}>
+            <Suspense fallback={<LoaderWithLabel label='設定情報を取得しています' />}>
+              <PluginLayout>
+                <Sidebar />
+                <PluginContent>
+                  <PluginErrorBoundary>
+                    <Form />
+                  </PluginErrorBoundary>
+                </PluginContent>
+                <PluginBanner url={URL_BANNER} />
+                <Footer />
+              </PluginLayout>
+            </Suspense>
+          </SnackbarProvider>
+        </PluginConfigProvider>
+      </PluginErrorBoundary>
     </RecoilRoot>
-    <SocialIcons />
-  </>
+    <iframe title='promotion' loading='lazy' src={URL_PROMOTION} className='border-0 w-full h-16' />
+  </Suspense>
 );
 
 export default Component;
