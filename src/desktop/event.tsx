@@ -33,10 +33,10 @@ manager.add(['app.record.create.show', 'app.record.edit.show'], async (event) =>
         const srcField = record[src];
         const dstField = record[dst];
 
-        if (TEXT_FIELD_TYPES.includes(srcField.type)) {
-          srcField.value = getFieldValueAsString(dstField);
+        if (TEXT_FIELD_TYPES.includes(dstField.type)) {
+          dstField.value = getFieldValueAsString(srcField);
         } else {
-          srcField.value = dstField.value;
+          dstField.value = srcField.value;
         }
       }
       setCurrentRecord({ record });
