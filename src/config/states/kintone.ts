@@ -5,6 +5,17 @@ import { GUEST_SPACE_ID } from '@/lib/global';
 
 const PREFIX = 'kintone';
 
+const READONLY_FIELDS: kintoneAPI.FieldPropertyType[] = [
+  'RECORD_NUMBER',
+  'CREATOR',
+  'CREATED_TIME',
+  'MODIFIER',
+  'UPDATED_TIME',
+  'STATUS',
+  'CALC',
+  'REFERENCE_TABLE',
+];
+
 export const appFieldsState = selector<kintoneAPI.FieldProperty[]>({
   key: `${PREFIX}appFieldsState`,
   get: async () => {
@@ -19,6 +30,14 @@ export const appFieldsState = selector<kintoneAPI.FieldProperty[]>({
     const values = Object.values(properties);
 
     return values.sort((a, b) => a.label.localeCompare(b.label, 'ja'));
+  },
+});
+
+export const dstFieldsState = selector<kintoneAPI.FieldProperty[]>({
+  key: `${PREFIX}dstFieldsState`,
+  get: async ({ get }) => {
+    const fields = get(appFieldsState);
+    return fields.filter((field) => !READONLY_FIELDS.includes(field.type));
   },
 });
 

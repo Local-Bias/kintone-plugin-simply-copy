@@ -6,7 +6,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { produce } from 'immer';
 import { RecoilFieldSelect } from '@konomi-app/kintone-utilities-react';
 
-import { appFieldsState } from '../../../states/kintone';
+import { appFieldsState, dstFieldsState } from '../../../states/kintone';
 import { getConditionPropertyState } from '../../../states/plugin';
 import { useRecoilRow } from '@/config/hooks/use-recoil-row';
 import { ArrowRight } from '@mui/icons-material';
@@ -59,7 +59,7 @@ const Component: FC = () => {
           <ArrowRight />
           <RecoilFieldSelect
             label='コピー先のフィールド'
-            state={appFieldsState}
+            state={dstFieldsState}
             onChange={(code) => onDstFieldChange(i, code)}
             fieldCode={dst}
           />
