@@ -1,42 +1,68 @@
+import { restorePluginConfig } from '@/lib/plugin';
+import { manager } from '@/lib/event-manager';
+import {
+  getCurrentRecord,
+  getHeaderSpace,
+  getSpaceElement,
+  setCurrentRecord,
+} from '@lb-ribbit/kintone-xapp';
+import { createRoot } from 'react-dom/client';
+import { Button } from '@mui/material';
 import React from 'react';
-import { render } from 'react-dom';
-import { getCurrentRecord, getSpaceElement, setCurrentRecord } from '@common/kintone';
-import { restoreStorage } from '@common/plugin';
-import { PLUGIN_NAME } from '@common/statics';
+import { getFieldValueAsString, kintoneAPI } from '@konomi-app/kintone-utilities';
 
-import Button from './button';
+const TEXT_FIELD_TYPES: kintoneAPI.Field['type'][] = [
+  'SINGLE_LINE_TEXT',
+  'MULTI_LINE_TEXT',
+  'RICH_TEXT',
+  'LINK',
+  'NUMBER',
+];
 
-const events: launcher.EventTypes = ['app.record.create.show', 'app.record.edit.show'];
-
-const action: launcher.Action = async (event, pluginId) => {
-  const config = restoreStorage(pluginId);
-
-  if (!config || !config.conditions) {
-    return event;
-  }
+manager.add(['app.record.create.show', 'app.record.edit.show'], async (event) => {
+  const config = restorePluginConfig();
 
   for (const condition of config.conditions) {
-    const element = getSpaceElement(condition.spaceId);
+    const { buttonLabel, embeddingMode, spaceId, copyTargetFields } = condition;
 
+    const buttonContainer = document.createElement('span');
+    buttonContainer.classList.add('mx-2', 'inline-flex', 'items-center');
     const onClick = () => {
-      try {
-        const { record } = getCurrentRecord();
+      const { record } = getCurrentRecord();
+      for (const { src, dst } of copyTargetFields) {
+        const srcField = record[src];
+        const dstField = record[dst];
 
-        record[condition.fieldDst].value = record[condition.fieldSrc].value;
-
-        console.log(record);
-        setCurrentRecord({ record });
-      } catch (error) {
-        console.error(PLUGIN_NAME + 'でエラーが発生しました。設定情報をご確認ください。');
+        if (TEXT_FIELD_TYPES.includes(srcField.type)) {
+          srcField.value = getFieldValueAsString(dstField);
+        } else {
+          srcField.value = dstField.value;
+        }
       }
+      setCurrentRecord({ record });
     };
 
-    const buttonLabel = condition.buttonLabel;
-
-    render(<Button {...{ onClick, buttonLabel }} />, element);
+    if (embeddingMode === 'header') {
+      buttonContainer.classList.add('mt-2');
+      const headerElement = getHeaderSpace(event.type);
+      if (!headerElement) {
+        process.env.NODE_ENV === 'development' && console.warn('headerElement is not found');
+        continue;
+      }
+      headerElement.appendChild(buttonContainer);
+    } else {
+      const spaceElement = getSpaceElement(spaceId);
+      if (!spaceElement) {
+        process.env.NODE_ENV === 'development' && console.warn('spaceElement is not found');
+        continue;
+      }
+      spaceElement.appendChild(buttonContainer);
+    }
+    createRoot(buttonContainer).render(
+      <Button variant='contained' color='primary' size='large' onClick={onClick}>
+        {buttonLabel}
+      </Button>
+    );
   }
-
   return event;
-};
-
-export default { events, action };
+});
