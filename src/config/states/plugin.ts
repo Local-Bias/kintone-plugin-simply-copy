@@ -36,7 +36,7 @@ const conditionPropertyState = selectorFamily<
     ({ get }) => {
       const conditionIndex = get(tabIndexState);
       const storage = get(storageState);
-      return storage.conditions[conditionIndex][key];
+      return storage.conditions[conditionIndex]![key];
     },
   set:
     (key) =>
@@ -54,4 +54,3 @@ const conditionPropertyState = selectorFamily<
 
 export const getConditionPropertyState = <T extends keyof Plugin.Condition>(property: T) =>
   conditionPropertyState(property) as unknown as RecoilState<Plugin.Condition[T]>;
-

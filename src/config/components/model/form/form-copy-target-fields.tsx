@@ -27,7 +27,7 @@ const Component: FC = () => {
       (rowIndex: number, value: string) => {
         set(copyTargetFieldsState, (current) =>
           produce(current, (draft) => {
-            draft[rowIndex].src = value;
+            draft[rowIndex]!.src = value;
           })
         );
       },
@@ -39,7 +39,7 @@ const Component: FC = () => {
       (rowIndex: number, value: string) => {
         set(copyTargetFieldsState, (current) =>
           produce(current, (draft) => {
-            draft[rowIndex].dst = value;
+            draft[rowIndex]!.dst = value;
           })
         );
       },

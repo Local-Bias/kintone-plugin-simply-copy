@@ -33,6 +33,15 @@ manager.add(['app.record.create.show', 'app.record.edit.show'], async (event) =>
         const srcField = record[src];
         const dstField = record[dst];
 
+        if (!srcField) {
+          console.warn(`Field ${src} is not found`);
+          continue;
+        }
+        if (!dstField) {
+          console.warn(`Field ${dst} is not found`);
+          continue;
+        }
+
         if (TEXT_FIELD_TYPES.includes(dstField.type)) {
           dstField.value = getFieldValueAsString(srcField);
         } else {

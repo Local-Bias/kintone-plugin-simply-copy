@@ -63,7 +63,7 @@ export const getUpdatedStorage = <T extends keyof Plugin.Condition>(
 ) => {
   const { conditionIndex, key, value } = props;
   return produce(storage, (draft) => {
-    draft.conditions[conditionIndex][key] = value;
+    draft.conditions[conditionIndex]![key] = value;
   });
 };
 
