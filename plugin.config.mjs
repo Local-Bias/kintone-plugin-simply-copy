@@ -1,12 +1,24 @@
 //@ts-check
 const hp = 'https://konomi.app/';
 const commonCdn = 'https://kintone-plugin.konomi.app/common';
-const localhost = 'https://127.0.0.1:3547';
 
-/** @type { import('@konomi-app/kintone-utilities').PluginConfig } */
-export default {
+/** @satisfies { Plugin.Meta.Config } */
+export default /** @type { const } */ ({
   id: 'ribbit-kintone-plugin-simply-copy',
   pluginReleasePageUrl: `https://ribbit.konomi.app/kintone-plugin/`,
+  server: {
+    port: 3547,
+  },
+  lint: {
+    build: true,
+  },
+  tailwind: {
+    css: 'src/styles/global.css',
+    config: {
+      desktop: 'tailwind.config.desktop.mjs',
+      config: 'tailwind.config.config.mjs',
+    },
+  },
   manifest: {
     base: {
       manifest_version: 1,
@@ -33,20 +45,6 @@ export default {
         required_params: [],
       },
     },
-    dev: {
-      desktop: {
-        js: [`${localhost}/dist/dev/desktop.js`],
-        css: [`${localhost}/dist/dev/desktop.css`],
-      },
-      mobile: {
-        js: [`${localhost}/dist/dev/desktop.js`],
-        css: [`${localhost}/dist/dev/desktop.css`],
-      },
-      config: {
-        js: [`${localhost}/dist/dev/config.js`],
-        css: [`${localhost}/dist/dev/config.css`],
-      },
-    },
     prod: {
       desktop: { js: ['desktop.js'], css: ['desktop.css'] },
       mobile: { js: ['desktop.js'], css: ['desktop.css'] },
@@ -58,4 +56,4 @@ export default {
       config: { js: ['config.js'], css: ['config.css'] },
     },
   },
-};
+});
