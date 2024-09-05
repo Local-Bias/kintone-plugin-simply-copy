@@ -1,15 +1,16 @@
-import { restorePluginConfig } from '@/lib/plugin';
 import { manager } from '@/lib/event-manager';
+import { restorePluginConfig } from '@/lib/plugin';
 import {
   getCurrentRecord,
+  getFieldValueAsString,
   getHeaderSpace,
   getSpaceElement,
+  kintoneAPI,
   setCurrentRecord,
-} from '@lb-ribbit/kintone-xapp';
-import { createRoot } from 'react-dom/client';
+} from '@konomi-app/kintone-utilities';
 import { Button } from '@mui/material';
 import React from 'react';
-import { getFieldValueAsString, kintoneAPI } from '@konomi-app/kintone-utilities';
+import { createRoot } from 'react-dom/client';
 
 const TEXT_FIELD_TYPES: kintoneAPI.Field['type'][] = [
   'SINGLE_LINE_TEXT',
